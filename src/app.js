@@ -1,7 +1,6 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import { LIMIT } from "./constants"  
 const app = express()
 
 // app.use() is used for all the configurations,middlewares
@@ -11,12 +10,12 @@ app.use(cors({
 }))
 
 app.use(express.json({
-    limit: LIMIT
+    limit: "16kb"
 }))
 
 app.use(express.urlencoded({
     extended:true, 
-    limit: LIMIT
+    limit: "16kb"
 }))
 
 app.use(express.static("public")) //to store public asserts
@@ -29,10 +28,6 @@ import userRouter from "./routes/user.routes.js"
 
 //routes declaration
 app.use("/api/v1/users",userRouter)
-//https://localhost:8000/api/v1/users/register
+//http://localhost:2050/api/v1/users/register 
 
-
-
-
-
-export { app }
+export default app;
