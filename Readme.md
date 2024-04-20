@@ -1,6 +1,6 @@
 # Community Hub
 A website which provides platform for clubs and students
-- [Model link]( yet to complete )
+- [ER Model link](https://app.eraser.io/workspace/9FpwqJFAuntBvP5SEmEV?origin=share )
 
 HTTP Methods
 * GET : retrive a resource
