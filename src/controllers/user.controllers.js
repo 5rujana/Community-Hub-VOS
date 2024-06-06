@@ -180,10 +180,198 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
 
 })
 
+
+const changeCurrentPassword = asyncHandler(async(req,res)=>{
+    const {oldPassword,newPassword,confPassword} = req.body
+    const user = await User.findById(req.user?._id)
+    const isPasswordCorrect = await user.isPasswordMatch(oldPassword)
+
+    if(!isPasswordCorrect){
+        throw new ApiError(400, "Inva lid old password")
+    }
+
+    if(!(newPassword === confPassword)){
+        throw new ApiError(402, "Passwords doesn't match")
+    }
+
+    if(!(newPassword===oldPassword)){
+        throw new ApiError(403, "New password is already used Password")
+    }
+
+    user.password = newPassword
+    await user.save({validateBeforeSave: false})
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,{},"password changed successfully"))
+})
+
+const updateAccountDetails = asyncHandler(async(req,res)=>{
+    const {fullname, email} = req.body
+
+    if([fullname,email].some((feild)=> feild?.trim()==="")){
+        throw new ApiError(400,"All feilds are required")
+    }
+
+    const user = await User.findByIdAndUpdate(req.user?._id,
+        {
+            $set:{
+                fullname,
+                email
+            }
+        },
+        {
+            new:true
+        }
+
+    ).select("-password -refreshToken")
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,{},"User details updated successfully"))
+
+    
+})
+
+const getCurrentUser = asyncHandler(async(req,res)=>{
+    const user = await User.findById(req.user?._id).select("-password -refreshToken")
+    return res
+    .status(200)
+    .json(new ApiResponse(200,user,"User details fetched successfully"))
+})
+
+const updateUserAvatar = asyncHandler(async(req,res)=>{
+    const avatarLocalPath =  req.file?.path 
+
+    if(!avatarLocalPath){
+        throw new ApiError(400,"Avatar file is missing")
+    }
+
+    const avatar = await UploadOnCloudinary(avatarLocalPath)
+
+    if(!avatar.url){
+        throw new ApiError(400,"Error while uploading on avatar")
+    }
+
+    await User.findByIdAndUpdate(req.user?._id,
+        {
+            $set:{
+                avatar:avatar.url
+            }
+        },
+    {new:true}).select("-password -refreshToken")
+
+    //create a utility function to delete the old avatar from cloudinary
+    return res
+    .status(200)
+    .json(new ApiResponse(200,{},"Avatar updated successfully"))
+    
+})
+
+const updateUserCoverImage = asyncHandler(async(req,res)=>{
+    const coverImageLocalPath =  req.file?.path 
+
+    if(!coverImageLocalPath){
+        throw new ApiError(400,"Cover Image file is missing")
+    }
+
+    const coverImage = await UploadOnCloudinary(coverImageLocalPath)
+
+    if(!coverImage.url){
+        throw new ApiError(400,"Error while uploading on cover image")
+    }
+
+    await User.findByIdAndUpdate(req.user?._id,
+        {
+            $set:{
+                coverImage:coverImage.url
+            }
+        },
+    {new:true}).select("-password -refreshToken")
+    //create a utility function to delete the old coverImage from cloudinary
+    return res
+    .satatus(200)
+    .json(new ApiResponse(200,{},"Cover Image updated successfully"))
+    
+})
+
+const getUserAccountProfile = asyncHandler(async(req,res)=>{
+    const {username} = req.params 
+    if(!username?.trim()){
+        throw new ApiError(404,"Username is missing")
+    }
+
+    const account = await User.aggregate([ 
+        {
+            $match:{
+                username:username.toLowerCase()
+            }
+        },
+        {
+            $lookup:{
+                from:"Follows",
+                localField:"_id",
+                foreignField:"account",
+                as:"followers"
+            }
+        },
+
+        {
+            $lookup:{
+                from:"Follows",
+                localField:"_id",
+                foreignField:"follower",
+                as:"following"
+            
+            }
+        },
+        {
+            $addFields:{
+                totalFollowers:{$size:"$followers"},
+                totalfollowing:{$size:"$following"},
+                isUserFollowing:{
+                    $cond:{
+                        if:{ $in:[req.user?._id,"$folloers.follower"]}, 
+                        then:true,
+                        else:false
+                    }}
+            }
+        },
+
+        {
+            $project:{
+                fullname:1,
+                username:1,
+                avatar:1,
+                coverImage:1,
+                totalFollowers:1,
+                totalfollowing:1,
+                isUserFollowing:1
+            }
+        }
+     ])
+
+     console.log(account)
+    if(!account?.length){
+        throw new ApiError(404,"Account not found")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,channel[0],"Account profile fetched successfully"))
+    
+}) 
+
 export {registerUser,
         loginUser,
         logoutUser,
-        refreshAccessToken
+        refreshAccessToken,
+        changeCurrentPassword,
+        updateAccountDetails,
+        getCurrentUser,
+        updateUserAvatar,
+        updateUserCoverImage,
+        getUserAccountProfile
 } 
 
 
