@@ -7,14 +7,14 @@ import jwt from "jsonwebtoken"
 
 
 const registerUser = asyncHandler(async (req,res) =>{
-    const {fullname,email,phone_number,password} = req.body
+    const {fullname,email,username,password} = req.body
     console.log(`email: ${email}`)
     if([fullname,email,username,password].some((field)=>field.trim()==="")){
         throw new ApiError(404,"All fields are required")
     }
 
     const existingUser = await User.findOne({
-        $or:[{Username},{email}]
+        $or:[{username},{email}]
     })
     
     if(existingUser){

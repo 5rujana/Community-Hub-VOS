@@ -15,12 +15,7 @@ const userSchema = new Schema({
         lowercase:true,
         trim:true,
     },
-    phone_number:{
-        type:String,
-        required:true,
-        unique:true, 
-    },
-    user_name:{
+    username:{
         type:String,
         required:true,
         unique:true,
@@ -28,7 +23,7 @@ const userSchema = new Schema({
         trim:true,
         index:true //for efficient searching
     },
-    avtar:{
+    avatar:{
         type:String, //cloudinary url
         required:true
     },
@@ -48,7 +43,7 @@ const userSchema = new Schema({
 })
 
 userSchema.pre("save", async function(next){
-    if(!this.ismodified("password")){
+    if(!this.isModified("password")){
         return next();
     }
     this.password = bcrypt.hash(this.password,10)
