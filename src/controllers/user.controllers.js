@@ -207,9 +207,9 @@ const changeCurrentPassword = asyncHandler(async(req,res)=>{
 })
 
 const updateAccountDetails = asyncHandler(async(req,res)=>{
-    const {fullname, email} = req.body
+    const {fullname, username} = req.body
 
-    if([fullname,email].some((feild)=> feild?.trim()==="")){
+    if([fullname,username].some((feild)=> feild?.trim()==="")){
         throw new ApiError(400,"All feilds are required")
     }
 
@@ -217,7 +217,7 @@ const updateAccountDetails = asyncHandler(async(req,res)=>{
         {
             $set:{
                 fullname,
-                email
+                username
             }
         },
         {
