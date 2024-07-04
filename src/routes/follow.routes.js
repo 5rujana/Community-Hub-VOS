@@ -3,7 +3,7 @@ import {
     toggleFollow,
     getUserAccountFollowers,
     getFollowingAccounts
-} from "../controllers/subscription.controller.js"
+} from "../controllers/follow.controller.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 
 const router = Router();
