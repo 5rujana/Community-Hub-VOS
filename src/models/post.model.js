@@ -9,6 +9,9 @@ const postSchema = new Schema({
         type:string,
         required:true,
     },
+    thumbnail:{
+        type:string
+    },
     views:{
         type:Number,
         ref:"0"
