@@ -2,15 +2,15 @@ import mongoose ,{Schema} from "mongoose"
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"
 const postSchema = new Schema({
     postFile:{
-        type:string, //cloudinary url
-        required: true,
+        type:String, //cloudinary url
+        required: true
     },
     caption :{
-        type:string,
+        type:String,
         required:true,
     },
     thumbnail:{
-        type:string
+        type:String
     },
     views:{
         type:Number,
