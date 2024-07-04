@@ -21,15 +21,15 @@ const userSchema = new Schema({
         unique:true,
         lowercase:true,
         trim:true,
-        index:true //for efficient searching
+        index:true 
     },
     avatar:{
-        type:String, //cloudinary url
+        type:String, 
         required:true
     },
     coverImage: {
-        type:String //cloudinary url
-    }, // we should add activity schema too
+        type:String 
+    }, 
     password:{
         type:String,
         required:[true,'password is required']
