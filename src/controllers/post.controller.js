@@ -80,42 +80,46 @@ const getPostById = asyncHandler(async (req, res) => {
 
 const updatePost = asyncHandler(async (req, res) => {
     const { postId } = req.params
-    if(!isValidObjectId(postId)){
-        throw new ApiError(400,"Invalid post id")
+    if (!isValidObjectId(postId)) {
+        throw new ApiError(400, "Invalid post id")
     }
-    const post = await Post.findById(videoId)
-    if(!post){
-        throw new ApiError(404,"Post not found")
+    const post = await Post.findById(postId)
+    if (!post) {
+        throw new ApiError(404, "Post not found")
     }
 
     let thumbnailLocalPath
-    if(req.files && Array.isArray(req.files.thumbnail) && req.files.thumbnail.length>0){
+    if (req.files && Array.isArray(req.files.thumbnail) && req.files.thumbnail.length > 0) {
         thumbnailLocalPath = req.files.thumbnail[0].path
     }
-    
-    const {caption} = req.body
-    if([caption].some((field)=>field.trim()==="")){
-        throw new ApiError(400,"Caption is required")
-    }
-    const thumbnail = await UploadOnCloudinary(thumbnailLocalPath)
-    if(!thumbnail){
-        throw new ApiError(500,"There was an error uploading thumbnail")
+
+    const { caption } = req.body
+    if ([caption].some((field) => field.trim() === "")) {
+        throw new ApiError(400, "Caption is required")
     }
 
-    await Video.findByIdAndUpdate(videoId,
+    console.log("Thumbnail local path:", thumbnailLocalPath)
+    let thumbnail = null
+    if (thumbnailLocalPath) {
+        thumbnail = await UploadOnCloudinary(thumbnailLocalPath)
+        if (!thumbnail) {
+            throw new ApiError(500, "There was an error uploading thumbnail")
+        }
+    }
+
+    await Post.findByIdAndUpdate(postId,
         {
-            $set:{
+            $set: {
                 caption,
-                thumbnail:thumbnail?.url || ""
+                thumbnail: thumbnail?.url || post.thumbnail
             }
         },
-        {new:true}
+        { new: true }
     )
 
     res
-    .status(200)
-    .json(new ApiResponse(200,{},"Video details are updated successfully"))
-
+        .status(200)
+        .json(new ApiResponse(200, {}, "Post details are updated successfully"))
 })
 
 const deletePost = asyncHandler(async (req, res) => {
@@ -136,37 +140,10 @@ const deletePost = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200,{},"Post is deleted successfully"))  
 })
 
-const togglePublishStatus = asyncHandler(async (req, res) => {
-    const { postId } = req.params
-    if(!isValidObjectId(postId)){
-        throw new ApiError(400,"Invalid post id")
-    }
-    const post = await Post.findById(postId)
-    if(!post){
-        throw new ApiError(404,"Post not found")
-    }
-
-    const postedflag = post.isPosted
-    await Post.findByIdAndUpdate(videoId,
-        {
-            $set:{
-                isPosted:!postedflag
-            }
-        },
-        {new:true}
-    )
-
-    postedflag? false:true
-    res
-    .status(200)
-    .json(new ApiResponse(200,{postedflag},"Post publish status is toggled successfully"))
-})
-
 export {
     getAllPosts,
     publishAPost,
     getPostById,
     updatePost,
     deletePost,
-    togglePublishStatus
 }
