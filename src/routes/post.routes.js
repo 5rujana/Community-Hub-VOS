@@ -37,6 +37,4 @@ router
     .delete(deletePost)
     .patch(upload.single("thumbnail"), updatePost);
 
-router.route("/toggle/publish/:postId").patch(togglePublishStatus);
-
 export default router
