@@ -18,6 +18,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
             docs: "posts"
         }
     })
+             
 
     if(!posts){
         return next(new ApiError(400,"No posts found"))
@@ -28,7 +29,8 @@ const getAllPosts = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200,{posts:posts},"Posts are fetched successfully"))
 })
 
-const publishAPost = asyncHandler(async (req, res) => {
+const publishAPost = asyncHandler(async (req, res) => {  
+           
     const {caption} = req.body
     if([caption].some((field)=>field.trim()==="")){
         throw new ApiError(400,"Caption is required")
