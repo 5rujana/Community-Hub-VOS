@@ -4,8 +4,7 @@ import {
     publishAPost,
     getPostById,
     updatePost,
-    deletePost,
-    togglePublishStatus
+    deletePost
 } from "../controllers/post.controller.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {upload} from "../middlewares/multer.middleware.js"
