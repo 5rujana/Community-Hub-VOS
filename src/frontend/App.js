@@ -1,14 +1,10 @@
-// src/App.js
 import React from 'react';
-import Navbar from './navbar';
-import HeroSection from './herosection';
-import './index.css';
+import DashboardSection from './dashboard';
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <HeroSection />
+    <div>
+      <DashboardSection />
     </div>
   );
 }
