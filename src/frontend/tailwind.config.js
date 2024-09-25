@@ -19,6 +19,9 @@ export default {
         'yellow2' : '#FFE6DF',
         'yellow3' : '#FFE1E1',
         'gray1' : '#444553',
+        'gray2' : '#E7ECF0',
+        'gray3' : '#828282',
+        'gray4' : '#F6F8FA',
       },
       spacing: {
         '30' : '8.5rem',
@@ -31,7 +34,8 @@ export default {
         '120' : '36rem',
         '140' : '43rem',
         '160' : '55rem',
-        '162' : '60rem'
+        '162' : '60rem',
+        '170' : '66rem',
       }
     },
   },
