@@ -1,4 +1,4 @@
-export default function Example() {
+export default function feedPage() {
   return (
     <div className="min-h-screen p-4 w-1/2">
       <div className="max-w-2xl mx-auto">

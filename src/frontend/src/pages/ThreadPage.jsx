@@ -5,7 +5,7 @@ import ask from '../assets/Ask.png'
 import answer from '../assets/answer.png'
 import post from '../assets/post.png'
 
-const QnAPage = () => {
+const threadsPage = () => {
   return (
     <div className="relative h-screen w-screen">
         <NavBar />
@@ -39,4 +39,4 @@ const QnAPage = () => {
   )
 }
 
-export default QnAPage
+export default threadsPage
