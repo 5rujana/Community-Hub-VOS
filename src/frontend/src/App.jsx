@@ -5,7 +5,8 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import ThreadsPage from './pages/ThreadPage.jsx'
 import FeedPage from './components/feed.jsx'
-import DashboardSection from './pages/dashboard.jsx'
+import DashboardSection from './pages/dashboard.jsx';
+import HeroSection from './pages/herosection.jsx'
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
         <Route path='v1/home' element={<DashboardSection />} />
         <Route path='v1/threads' element={<ThreadsPage />} />
         <Route path='v1/feed' element={<FeedPage />} />
+        <Route path='v1/dashboard' element={<DashboardSection />} />
+        <Route path='v1/herosection' element={<HeroSection />} />
+
       </Routes>
     </BrowserRouter>
     </>
