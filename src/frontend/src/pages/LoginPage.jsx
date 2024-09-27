@@ -32,7 +32,7 @@ const LoginPage = () => {
         </div>
         <div className='absolute bottom-52 left-30 font-sans font-semibold'>
             If you don't have an account: &nbsp;
-            <a href='/signup' className='text-violet-700'>SIGN UP</a>
+            <a href='/v1/signup' className='text-violet-700'>SIGN UP</a>
         </div>
         <div className='absolute bottom-7 left-48 font-sans text-xs underline underline-offset-1'>
             © CSI CHAPTER 2024

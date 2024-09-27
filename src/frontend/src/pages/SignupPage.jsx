@@ -42,7 +42,7 @@ const SignupPage = () => {
             </div>
             <div className='absolute bottom-30 left-30 font-sans font-semibold'>
                 If you already have an account: &nbsp;
-                <a href='/login' className='text-violet-700'>LOG IN</a>
+                <a href='/v1/login' className='text-violet-700'>LOG IN</a>
             </div>
             <div className='absolute bottom-7 left-48 font-sans text-xs underline underline-offset-1'>
                 © CSI CHAPTER 2024

@@ -1,9 +1,13 @@
 import React from 'react';
 import { FaCalendarAlt, FaQuestionCircle, FaNewspaper } from 'react-icons/fa';
+import NavBar from '../components/NavBar';
+import HeroSection from './herosection';
 
 const DashboardSection = () => {
   return (
     <div>
+      <NavBar />
+      <HeroSection />
       {/* Top Section */}
       <div className="bg-purple-900 p-8 rounded-lg shadow-lg">
         <div className="text-white flex flex-col md:flex-row justify-around items-center md:items-start py-8 space-y-8 md:space-y-0">

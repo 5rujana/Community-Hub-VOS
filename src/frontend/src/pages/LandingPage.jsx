@@ -55,7 +55,7 @@ const LandingPage = () => {
             </div>
         </div>
         <div className="h-36">
-          <button className="bg-purple-900 p-2 px-6 my-5 text-white border-none rounded-full" onClick={() => {window.location.href = '/signup'}}>
+          <button className="bg-purple-900 p-2 px-6 my-5 text-white border-none rounded-full" onClick={() => {window.location.href = '/v1/signup'}}>
             Continue
           </button>
         </div>
