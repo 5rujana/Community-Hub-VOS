@@ -1,4 +1,4 @@
-export default function Example() {
+export default function Groups() {
   return (
     <div className="p-4 rounded-[20px] w-[375px]">
       <div className="bg-[#f0f4f8] rounded-full p-2 flex items-center mb-4">
