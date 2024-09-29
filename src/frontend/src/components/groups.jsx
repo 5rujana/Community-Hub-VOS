@@ -1,4 +1,53 @@
+import { useState, useEffect } from "react";
+import GroupItem from "./groupItem";
+
 export default function Groups() {
+  const [groups, setGroups] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredGroups, setFilteredGroups] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    try {
+      const filtered = groups.filter((group) =>
+        group.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredGroups(filtered);
+      setError(null);
+    } catch (err) {
+      setError("An error occurred while filtering groups. Please try again.");
+      console.error("Error filtering groups:", err);
+    }
+  }, [searchTerm, groups]);
+
+  const fetchGroups = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/groups"); // Replace with your actual API endpoint
+      if (!response.ok) {
+        throw new Error("Failed to fetch groups");
+      }
+      const data = await response.json();
+      setGroups(data);
+      setFilteredGroups(data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch groups. Please try again later.");
+      console.error("Error fetching groups:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <div className="p-4 rounded-[20px] w-[375px]">
       <div className="bg-[#f0f4f8] rounded-full p-2 flex items-center mb-4">
@@ -7,106 +56,22 @@ export default function Groups() {
           type="text"
           placeholder="Search Feed"
           className="bg-transparent outline-none ml-2 text-[#b0b7c3]"
+          value={searchTerm}
+          onChange={handleSearch}
         />
       </div>
-      <div className="space-y-6">
-        <div className="bg-white p-4 rounded-[20px] shadow-sm">
-          <h2 className="text-[#000000] text-[24px] font-bold">
-            The Computer Society of India
-          </h2>
-          <p className="text-[#000000] text-[16px]">csi</p>
-          <div className="flex items-center mt-2">
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <p className="text-[#000000] text-[14px] ml-2">2 k followers •</p>
-          </div>
-          <button className="bg-[#4b215f] text-white w-full py-2 mt-4 rounded-[10px]">
-            Follow
-          </button>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+      {isLoading ? (
+        <div>Loading groups...</div>
+      ) : filteredGroups.length > 0 ? (
+        <div className="space-y-6">
+          {filteredGroups.map((group) => (
+            <GroupItem key={group.id} group={group} />
+          ))}
         </div>
-        <div className="bg-white p-4 rounded-[20px] shadow-sm">
-          <h2 className="text-[#000000] text-[24px] font-bold">
-            NextGen Cloud
-          </h2>
-          <p className="text-[#000000] text-[16px]">ngc</p>
-          <div className="flex items-center mt-2">
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <p className="text-[#000000] text-[14px] ml-2">1.5 k followers •</p>
-          </div>
-          <button className="bg-[#4b215f] text-white w-full py-2 mt-4 rounded-[10px]">
-            Follow
-          </button>
-        </div>
-        <div className="bg-white p-4 rounded-[20px] shadow-sm">
-          <h2 className="text-[#000000] text-[24px] font-bold">
-            Be A Nerd Club
-          </h2>
-          <p className="text-[#000000] text-[16px]">ban_club</p>
-          <div className="flex items-center mt-2">
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <p className="text-[#000000] text-[14px] ml-2">1 k followers •</p>
-          </div>
-          <button className="bg-[#4b215f] text-white w-full py-2 mt-4 rounded-[10px]">
-            Follow
-          </button>
-        </div>
-        <div className="bg-white p-4 rounded-[20px] shadow-sm">
-          <h2 className="text-[#000000] text-[24px] font-bold">
-            VIT AP University
-          </h2>
-          <p className="text-[#000000] text-[16px]">vitap</p>
-          <div className="flex items-center mt-2">
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <img
-              src="https://picsum.photos/24"
-              className="w-6 h-6 rounded-full -ml-2"
-            />
-            <p className="text-[#000000] text-[14px] ml-2">1 k followers •</p>
-          </div>
-          <button className="bg-[#4b215f] text-white w-full py-2 mt-4 rounded-[10px]">
-            Follow
-          </button>
-        </div>
-      </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
