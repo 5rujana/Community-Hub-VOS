@@ -9,7 +9,7 @@ const DashboardSection = () => {
       <NavBar />
       <HeroSection />
       {/* Top Section */}
-      <div className="bg-purple-900 p-8 rounded-lg shadow-lg">
+      <div id='ql' className="bg-purple-900 p-8 rounded-lg shadow-lg">
         <div className="text-white flex flex-col md:flex-row justify-around items-center md:items-start py-8 space-y-8 md:space-y-0">
           {/* The Feed */}
           <div className="text-center flex-1">
@@ -44,7 +44,7 @@ const DashboardSection = () => {
       <div className="bg-white p-8 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1: Feed */}
-          <div className="bg-gray-100 rounded-lg shadow-md p-6 flex flex-col justify-between transform hover:scale-105 transition-transform" style={{ height: '550px' }}>
+          <div className="bg-gray-100 rounded-lg shadow-md p-6 pb-16 flex flex-col justify-between transform hover:scale-105 transition-transform" style={{ height: '550px' }}>
             <img
               src="https://cdn.iplocation.net/assets/images/pages/featured/Forums.jpg"
               alt="The Feed"
@@ -53,14 +53,16 @@ const DashboardSection = () => {
             <hr className="my-4 border-t-2 border-gray-300" />
             <h3 className="text-center text-xl font-semibold mb-4"><b>The Feed</b></h3>
             <div className="flex justify-center mt-auto">
-              <button className="bg-orange-500 text-white px-6 py-3 rounded-full text-lg hover:bg-orange-600 transition mt-auto">
+              <button className="bg-purple-900 text-white px-6 py-3 rounded-full text-lg hover:bg-orange-600 transition mt-auto" onClick={()=>{
+                window.location.href = '/v1/feed'
+              }}>
                 Continue
               </button>
             </div>
           </div>
 
           {/* Card 2: Q&A Forum */}
-          <div className="bg-gray-100 rounded-lg shadow-md p-6 flex flex-col justify-between transform hover:scale-105 transition-transform" style={{ height: '550px' }}>
+          <div className="bg-gray-100 rounded-lg shadow-md p-6 pb-16 flex flex-col justify-between transform hover:scale-105 transition-transform" style={{ height: '550px' }}>
             <img
               src="https://media.istockphoto.com/id/1337475990/photo/q-and-a-question-and-answer-shot-form-on-wooden-block.webp?a=1&b=1&s=612x612&w=0&k=20&c=hPBWhpA7NcOcfeGu8yasTC13Lr3F95vmbA1dYFNRHcE="
               alt="Q&A Forum"
@@ -69,14 +71,16 @@ const DashboardSection = () => {
             <hr className="my-4 border-t-2 border-gray-300" />
             <h3 className="text-center text-xl font-semibold mb-4"><b>The Q&A Forum</b></h3>
             <div className="flex justify-center mt-auto">
-              <button className="bg-orange-500 text-white px-6 py-3 rounded-full text-lg hover:bg-orange-600 transition mt-auto">
+              <button className="bg-purple-900 text-white px-6 py-3 rounded-full text-lg hover:bg-orange-600 transition mt-auto" onClick={()=>{
+                window.location.href = '/v1/threads'
+              }}>
                 Continue
               </button>
             </div>
           </div>
 
           {/* Card 3: Calendar */}
-          <div className="bg-gray-100 rounded-lg shadow-md p-6 flex flex-col justify-between transform hover:scale-105 transition-transform" style={{ height: '550px' }}>
+          <div className="bg-gray-100 rounded-lg shadow-md p-6 pb-16 flex flex-col justify-between transform hover:scale-105 transition-transform" style={{ height: '550px' }}>
             <img
               src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGNhbGVuZGFyfGVufDB8fHx8MTYwNDU1MDYyNA&ixlib=rb-1.2.1&q=80&w=400"
               alt="Calendar"
@@ -85,7 +89,9 @@ const DashboardSection = () => {
             <hr className="my-4 border-t-2 border-gray-300" />
             <h3 className="text-center text-xl font-semibold mb-4"><b>The Calendar</b></h3>
             <div className="flex justify-center mt-auto">
-              <button className="bg-orange-500 text-white px-6 py-3 rounded-full text-lg hover:bg-orange-600 transition mt-auto">
+              <button className="bg-purple-900 text-white px-6 py-3 rounded-full text-lg hover:bg-orange-600 transition mt-auto" onClick={()=>{
+                window.location.href = '#'
+              }}>
                 Continue
               </button>
             </div>

@@ -12,10 +12,14 @@
   "dependencies": {
     "@material-tailwind/react": "^2.1.10",
     "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
     "react-modal": "^3.16.1",
+    "react-multi": "^0.0.5",
+    "react-multi-carousel": "^2.8.5",
     "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
