@@ -30,23 +30,18 @@ const ThreadsPage = () => {
 
   return (
     <div className="relative h-screen w-screen">
-        <NavBar />
-        {/* 
-        <div className='absolute w-11/12 h-16 top-24 left-16 rounded-full bg-gray2'>
-            <input type="search" id="search" className="bg-gray2 border border-gray3 text-gray3 font-serif font-normal text-3xl rounded-md relative h-full w-full p-2.5" placeholder="Search Question" />
-        </div>
-        */}
+      <NavBar />
 
         <div className="absolute bg-gray4 h-100 w-80 top-28 left-16 rounded-3xl">
           <div className = "relative">
           <input type="search" id="search" className="bg-gray2 border border-gray3 text-gray3 font-serif font-normal text-l rounded-full h-10 w-72 p-2.5 pl-12 mx-4 my-6" placeholder="Search Topic" />
           <img src={search} alt="search" className="absolute left-8 top-8 h-6 w-5 text-gray-500" />
-          </div>
-          <div className="flex flex-row items-center gap-x-36">
-            <p className='text-purple-900 text-xl font-serif font-black mx-5'>Hot Topics</p>
-            <a href=""><img src={gear} alt="" className='h-6 w-6' /></a>
-          </div>
-          
+        </div>
+        <div className="flex flex-row items-center gap-x-36">
+          <p className="text-purple-900 text-xl font-serif font-black mx-5">Hot Topics</p>
+          <a href="">
+            <img src={gear} alt="" className="h-6 w-6" />
+          </a>
         </div>
         <div className="absolute bg-white h-28 w-170 top-28 py-4 left-98 rounded-3xl">
           <div className="flex flex-row items-center mt-5 mx-4">
@@ -91,7 +86,7 @@ const ThreadsPage = () => {
           ))}
         </div>
     </div>
-  )
-}
+  );
+};
 
 export default ThreadsPage

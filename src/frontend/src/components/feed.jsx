@@ -15,7 +15,7 @@ const Feed = () => {
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:4050/api/v1/posts');//we need to check
+      const response = await axios.get('http://localhost:4050/api/v1/posts/');//we need to check
       setPosts(response.data);
       setIsLoading(false);
     } catch (err) {
