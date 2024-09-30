@@ -41,6 +41,28 @@ const getUserThreads = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200,{threads},"Threads are fetched successfully"))
 })
 
+const getThreads = asyncHandler(async (req, res) => {
+    try {
+        const threads = await Thread.find();
+        const data = await Promise.all(threads.map(async (thread) => {
+            const threadOwner = await User.findById(thread.owner);
+            const userData = {
+                name : threadOwner.name,
+                email : threadOwner.email,
+                username : threadOwner.username,
+                avatar : threadOwner.avatar,
+            }
+            return {
+                ...thread._doc,
+                owner: userData
+            };
+        }));
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 const updateThread = asyncHandler(async (req, res) => {
     const {threadId} = req.params
     if(!threadId){
@@ -89,4 +111,5 @@ export {
     getUserThreads,
     updateThread,
     deleteThread,
+    getThreads
 }
