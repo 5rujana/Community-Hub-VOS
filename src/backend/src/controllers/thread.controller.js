@@ -1,4 +1,4 @@
-import mongoose, { isValidObjectId } from "mongoose"
+import { isValidObjectId } from "mongoose"
 import {Thread} from "../models/thread.model.js"
 import {User} from "../models/user.model.js"
 import {ApiError} from "../utils/ApiError.js"
@@ -31,7 +31,7 @@ const createThread = asyncHandler(async (req, res) => {
 })
 
 const getUserThreads = asyncHandler(async (req, res) => {
-    const {userId} = req.params
+    const userId = req.user._id;
     if(!isValidObjectId(userId)){
         throw new ApiError(400,"Invalid user id")
     }
@@ -88,5 +88,5 @@ export {
     createThread,
     getUserThreads,
     updateThread,
-    deleteThread
+    deleteThread,
 }
