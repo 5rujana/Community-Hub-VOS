@@ -2,8 +2,32 @@ import NavBar from '../components/NavBar'
 import gear from '../assets/gear.png'
 import logo from '../assets/logo.png'
 import search from '../assets/search-icon.svg'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
 
 const ThreadsPage = () => {
+
+  const [posts, setThreads] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:4050/api/v1/threads/all', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Cookies.get('accessToken')}`
+      },
+    })
+      .then((response) => {
+        setThreads(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data: ', error);
+      });
+  }
+  , []);
+
+
+
   return (
     <div className="relative h-screen w-screen">
         <NavBar />
@@ -46,7 +70,25 @@ const ThreadsPage = () => {
 
         </div>
         <div className="absolute bg-white h-100 w-170 top-[250px] left-98 rounded-3xl">
-
+        {posts.map((post) => (
+            <div key={post._id} className="border-b border-gray-300 pb-4 mb-4">
+              <div className="flex items-center mb-2">
+                <img
+                  src={post.owner.avatar}
+                  alt={post.owner.username}
+                  className="w-12 h-12 rounded-full mr-4"
+                />
+                <div>
+                  <p className="font-semibold text-lg">{post.owner.username}</p>
+                  <p className="text-sm text-gray-500">{post.owner.email}</p>
+                </div>
+              </div>
+              <p className="text-gray-800">{post.content}</p> {/* Display post content */}
+              <p className="text-sm text-gray-400 mt-2">
+                Posted on: {new Date(post.createdAt).toLocaleString()}
+              </p>
+            </div>
+          ))}
         </div>
     </div>
   )
