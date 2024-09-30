@@ -23,9 +23,9 @@
     "vite": "^5.4.5"
   },
   "dependencies": {
-    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.1.0",
+    "community-hub": "file:",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

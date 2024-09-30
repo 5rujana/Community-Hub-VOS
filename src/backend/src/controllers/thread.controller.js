@@ -1,4 +1,4 @@
-import mongoose, { isValidObjectId } from "mongoose"
+import { isValidObjectId } from "mongoose"
 import {Thread} from "../models/thread.model.js"
 import {User} from "../models/user.model.js"
 import {ApiError} from "../utils/ApiError.js"
@@ -31,7 +31,7 @@ const createThread = asyncHandler(async (req, res) => {
 })
 
 const getUserThreads = asyncHandler(async (req, res) => {
-    const {userId} = req.params
+    const userId = req.user._id;
     if(!isValidObjectId(userId)){
         throw new ApiError(400,"Invalid user id")
     }
@@ -40,6 +40,28 @@ const getUserThreads = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200,{threads},"Threads are fetched successfully"))
 })
+
+const getThreads = asyncHandler(async (req, res) => {
+    try {
+        const threads = await Thread.find();
+        const data = await Promise.all(threads.map(async (thread) => {
+            const threadOwner = await User.findById(thread.owner);
+            const userData = {
+                name : threadOwner.name,
+                email : threadOwner.email,
+                username : threadOwner.username,
+                avatar : threadOwner.avatar,
+            }
+            return {
+                ...thread._doc,
+                owner: userData
+            };
+        }));
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 const updateThread = asyncHandler(async (req, res) => {
     const {threadId} = req.params
@@ -88,5 +110,6 @@ export {
     createThread,
     getUserThreads,
     updateThread,
-    deleteThread
+    deleteThread,
+    getThreads
 }
