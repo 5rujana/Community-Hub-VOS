@@ -13,10 +13,15 @@ const Feed = () => {
   }, []);
 
   const fetchPosts = async () => {
+    const token = localStorage.getItem('token');
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:4050/api/v1/posts/');//we need to check
-      setPosts(response.data);
+      const response = await axios.get('http://localhost:4050/api/v1/posts/', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setPosts(response.data.posts);
       setIsLoading(false);
     } catch (err) {
       setError('Failed to fetch posts. Please try again later.');
@@ -70,7 +75,7 @@ const Feed = () => {
           <div className="text-center text-red-500">{error}</div>
         ) : (
           posts.map((post) => (
-            <FeedItem key={post.id} post={post} />
+            <FeedItem key={post._id} post={post} />
           ))
         )}
       </div>

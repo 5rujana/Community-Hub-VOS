@@ -1,35 +1,78 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 
-export default function FeedItem({ post }) {
+export default function FeedItem({ postId }) {
   const [likes, setLikes] = useState(post.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState(post.comments);
   const [showCommentPopup, setShowCommentPopup] = useState(false);
   const [newComment, setNewComment] = useState('');
+  useEffect(()=>{
+    async function fetchPostData(){
+      try{
+        const commentrResponse = await axios.get(`comments/${postId}`)
+        setComments(commentrResponse.data.comments);
+      }catch(err){
+        console.error("error fetching comments", err);
+      }
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikes(likes - 1);
-    } else {
-      setLikes(likes + 1);
+      try{
+        const likeResponse = await axios.get(`likes/${postId}`)
+        setLikes(likeResponse.data.likes);
+      }catch(err){
+        console.error("error fetching likes", err);
+      }
+
+      try{
+        const isLikedResponse = await axios.get(`/likes/toggle/p/${postId}`)
+        setIsLiked(isLikedResponse.data.isLiked);
+      }catch(err){
+        console.error("error", err);
+      }
+      try{
+        const newCommentResponse = await axios.post(`comments/${postId}`, {text: newComment})
+        setComments([...comments, newCommentResponse.data.comment]);
+      }catch(err){
+        console.error("error adding new comment", err);
+      }
     }
-    setIsLiked(!isLiked);
+    fetchPostData();
+  },[postId])
+
+  const handleLike = async () => {
+    try{
+      if (isLiked) {
+        await axios.delete(`/likes/${postId}`, {like: false});
+        setLikes(likes - 1);
+      } else {
+        await axios.post(`/likes/${postId}`, {like: true});
+        setLikes(likes + 1);
+      }
+      setIsLiked(!isLiked);
+    }catch(err){
+      console.error("error updating like: ", err);
+    }
   };
 
   const handleComment = () => {
     setShowCommentPopup(true);
   };
 
-  const handleShare = () => {
-    alert('Sharing this post!');
-  };
+  // const handleShare = () => {
+  //   alert('Sharing this post!');
+  // };
 
-  const handleSubmitComment = (e) => {
+  const handleSubmitComment = async (e) => {
     e.preventDefault();
-    if (newComment.trim()) {
-      setComments([...comments, { id: Date.now(), text: newComment, author: 'Current User' }]);
-      setNewComment('');
+    if(newComment.trim()){
+      try{
+        const newCommentResponse = await axios.post(`comments/${postId}`, {text: newComment, author: "user"});
+        setComments([...comments, newCommentResponse.data.comment]);
+        setNewComment('');
+      }catch(err){
+        console.error("error adding new comment", err);
+      }
     }
   };
 
