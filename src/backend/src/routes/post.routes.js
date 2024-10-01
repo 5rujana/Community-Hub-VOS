@@ -4,7 +4,8 @@ import {
     publishAPost,
     getPostById,
     updatePost,
-    deletePost
+    deletePost,
+    getFeed
 } from "../controllers/post.controller.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {upload} from "../middlewares/multer.middleware.js"
@@ -29,6 +30,10 @@ router
         ]),
         publishAPost
     );
+
+router
+    .route("/all")
+    .get(getFeed)
 
 router
     .route("/:postId")

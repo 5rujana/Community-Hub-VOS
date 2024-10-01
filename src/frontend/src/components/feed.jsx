@@ -16,7 +16,7 @@ const Feed = () => {
     const token = localStorage.getItem('token');
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:4050/api/v1/posts/', {
+      const response = await axios.get('http://localhost:4050/api/v1/posts/all', {
         headers: {
           Authorization: `Bearer ${token}`
         }

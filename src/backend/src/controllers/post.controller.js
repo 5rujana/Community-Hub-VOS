@@ -29,6 +29,30 @@ const getAllPosts = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200,{posts:posts},"Posts are fetched successfully"))
 })
 
+
+const getFeed = asyncHandler(async (req, res) => {
+    const { page = 1, limit = 10, query, sortBy, sortType } = req.query;
+    const maxLimit = Math.min(parseInt(limit), 40);
+
+    const posts = await Post.aggregatePaginate(query, {
+        page: parseInt(page),
+        limit: maxLimit,
+        sort: { [sortBy]: sortType }, 
+        customLabels: {
+            docs: "posts"
+        }
+    });
+
+    if (!posts) {
+        return next(new ApiError(400, "No posts found"));
+    }
+
+    res
+        .status(200)
+        .json(new ApiResponse(200, { posts }, "Feed is fetched successfully"));
+});
+
+
 const publishAPost = asyncHandler(async (req, res) => {  
            
     const {caption} = req.body
@@ -146,4 +170,5 @@ export {
     getPostById,
     updatePost,
     deletePost,
+    getFeed
 }
