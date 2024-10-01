@@ -9,7 +9,6 @@ import {registerUser,
         updateAccountDetails,
         getCurrentUser,
         updateUserAvatar,
-        updateUserCoverImage,
         getUserAccountProfile} from "../controllers/user.controllers.js"
 
 
@@ -19,10 +18,6 @@ router.route("/register").post(
     upload.fields([
         {
             name:"avatar",
-            maxCount:1
-        },
-        {
-            name:"coverImage",
             maxCount:1
         }
     ]),
@@ -37,7 +32,6 @@ router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 router.route("/current-user").get(verifyJWT, getCurrentUser)
 router.route("/update-account").patch(verifyJWT, updateAccountDetails)
 router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
-router.route("/cover-image").patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
 router.route("/c/:username").get(verifyJWT, getUserAccountProfile)
 
 export default router
