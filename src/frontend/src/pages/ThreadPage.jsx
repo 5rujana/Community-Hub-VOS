@@ -12,7 +12,7 @@ const ThreadsPage = () => {
   const [error, setError] = useState(null); // For error state
 
   useEffect(() => {
-    axios.get('http://localhost:4050/api/v1/threads/', {
+    axios.get('http://localhost:4050/api/v1/threads/all', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${Cookies.get('accessToken')}`,
