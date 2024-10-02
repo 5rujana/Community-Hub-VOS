@@ -39,7 +39,7 @@ const CreatePost = ({ onPostCreated }) => {
         onChange={(e) => setCaption(e.target.value)}
         placeholder="Caption"
         required
-        className="block w-full mb-2"
+        className="block text-wrap w-full px-10 py-10 mb-2 border border-purple-500 rounded-md"
       />
       <input
         type="file"

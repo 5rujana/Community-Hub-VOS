@@ -1,7 +1,7 @@
 import Feed from "../components/feed";
 import Groups from "../components/groups";
 import SideBar from "../components/sideBar";
-import Navbar from "../components/Navbar"; // Import the Navbar component
+import Navbar from "../components/NavBar"; // Import the Navbar component
 
 const FeedPage = () => {
   return (
