@@ -1,32 +1,29 @@
-export default function Navbar() {
-    return (
-  <div className="bg-[#4B2A5A] flex items-center justify-between px-4 py-2">
-    <div className="flex items-center">
-      <img
-        src="https://picsum.photos/50"
-        alt="Logo"
-        className="h-10 w-10"
-      />
-      <span className="text-[#333333] text-lg font-semibold ml-2">CSI X VIT AP</span>
-    </div>
-    <div className="flex space-x-8">
-      <div className="flex items-center space-x-2">
-        <i className="fas fa-home text-white"></i>
-        <span className="text-white">Home</span>
-      </div>
-      <div className="flex items-center space-x-2">
-        <i className="fas fa-comment-dots text-white"></i>
-        <span className="text-white">Message</span>
-      </div>
-      <div className="flex items-center space-x-2">
-        <i className="fas fa-heart text-white"></i>
-        <span className="text-white">Favourites</span>
-      </div>
-      <div className="flex items-center space-x-2">
-        <i className="fas fa-cog text-white"></i>
-        <span className="text-white">Settings</span>
-      </div>
-    </div>
-  </div>
-);
+import logo from "../assets/logo.png"
+import { navItems } from "../constants/index"
+
+const NavBar = () => {
+  return (
+    <nav className="bg-purple-900 py-2">
+        <div className="container px-4 mx-auto relative text-sm">
+            <div className="flex flex-row justify-start items-center">
+                <div className="flex basis-1/2 items-center flex-shrink-0">
+                    <img className="h-10 w-12 mr-2" src={logo} alt="" />
+                    <span className="span text-xl tracking-tight text-white font-sans">CSI X VIT AP</span>
+                </div>
+                <div className="flex basis-1/2 justify-end items-center text-white font-sans">
+                    <ul className="lg:flex ml-14 space-x-20  text-lg">
+                    {navItems.map((item, index) => (
+                        <li key={index}>
+                            <a href={item.href}>{item.label}</a>
+                        </li>
+                    ))}
+                </ul>
+                </div>
+                
+            </div>
+        </div>
+    </nav>
+  )
 }
+
+export default NavBar
