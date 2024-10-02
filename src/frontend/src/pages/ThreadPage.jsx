@@ -13,15 +13,37 @@ const ThreadsPage = () => {
   const [loading, setLoading] = useState(true); // For loading state
   const [error, setError] = useState(null); // For error state
   const postsPerPage = 3; // Limit posts displayed per page to 3
+  const [newPost, setNewPost] = useState([]); 
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:4050/api/v1/threads/all', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get('accessToken')}`,
-        },
-      })
+  const handleInputChange = (event) => {
+    setNewPost(event.target.value);
+  };
+
+  const TriggernewPost = () => {
+    const postData = {
+      content: newPost,
+    };
+
+    axios.post('http://localhost:4050/api/v1/threads/', postData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Cookies.get('accessToken')}`,
+      }
+    }).then((response) => {
+      fetchPosts();
+      setNewPost('');
+    }).catch((error) => {
+        console.error('Error posting data:', error);
+    });
+  };
+
+  const fetchPosts = () => {
+    axios.get('http://localhost:4050/api/v1/threads/all', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Cookies.get('accessToken')}`,
+      },
+    })
       .then((response) => {
         setPosts(response.data);
         setLoading(false);
@@ -30,6 +52,9 @@ const ThreadsPage = () => {
         setError('Error fetching posts. Please try again later.');
         setLoading(false);
       });
+  };
+  useEffect(() => {
+    fetchPosts();
   }, []);
 
   if (loading) {
@@ -102,8 +127,10 @@ const ThreadsPage = () => {
             type="search"
             className="bg-gray-100 ms-4 border border-gray-300 text-gray-600 font-serif font-normal text-lg rounded-full h-10 w-[850px] px-5 py-2.5"
             placeholder="Do you want to share your thoughts?"
+            value={newPost}
+            onChange={handleInputChange}
           />
-          <button className="ms-4 bg-purple-900 text-white pl-5 pr-5 pt-2 pb-2 rounded-full hover:bg-purple-800 active:bg-purple-900">
+          <button onClick={TriggernewPost} className="ms-4 bg-purple-900 text-white pl-5 pr-5 pt-2 pb-2 rounded-full hover:bg-purple-800 active:bg-purple-900">
             Post
           </button>
         </div>

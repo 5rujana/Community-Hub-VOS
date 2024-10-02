@@ -44,6 +44,10 @@ const getUserThreads = asyncHandler(async (req, res) => {
 const getThreads = asyncHandler(async (req, res) => {
     try {
         const threads = await Thread.find();
+        // sort the threads by date
+        threads.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
         const data = await Promise.all(threads.map(async (thread) => {
             const threadOwner = await User.findById(thread.owner);
             const userData = {
