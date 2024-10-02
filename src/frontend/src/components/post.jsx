@@ -1,62 +1,27 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-
-const CreatePost = ({ onPostCreated }) => {
-  const [caption, setCaption] = useState('');
-  const [postFile, setPostFile] = useState(null);
-  const [thumbnail, setThumbnail] = useState(null);
-  const [error, setError] = useState(null);
-
-  const handlePostCreation = async (e) => {
-    e.preventDefault();
-    
-    const formData = new FormData();
-    formData.append('caption', caption);
-    if (postFile) formData.append('postFile', postFile);
-    if (thumbnail) formData.append('thumbnail', thumbnail);
-    
-    const token = localStorage.getItem('token');
-    
-    try {
-      await axios.post('http://localhost:4050/api/v1/posts/', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      onPostCreated(); // Trigger refetch of posts
-    } catch (err) {
-      setError('Failed to create post. Please try again.');
-    }
-  };
-
-  return (
-    <form onSubmit={handlePostCreation} className="p-4">
-      {error && <div className="text-red-500">{error}</div>}
-      <input
-        type="text"
-        value={caption}
-        onChange={(e) => setCaption(e.target.value)}
-        placeholder="Caption"
-        required
-        className="block w-full mb-2"
-      />
-      <input
-        type="file"
-        onChange={(e) => setPostFile(e.target.files[0])}
-        required
-        className="block w-full mb-2"
-      />
-      <input
-        type="file"
-        onChange={(e) => setThumbnail(e.target.files[0])}
-        className="block w-full mb-4"
-      />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Publish Post
-      </button>
-    </form>
-  );
-};
-
-export default CreatePost;
+export default function Post() {
+    return (
+  <div className="bg-[#ffffff] p-4">
+    <div className="flex justify-center space-x-4 mb-4">
+      <div className="flex items-center space-x-2">
+        <i className="fas fa-file-alt text-[#6c63ff]"></i>
+        <span className="text-[#6c63ff] font-semibold">Posts</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <i className="fas fa-comments text-[#6c63ff]"></i>
+        <span className="text-[#6c63ff] font-semibold">Threads</span>
+      </div>
+    </div>
+    <div className="grid grid-cols-3 gap-4">
+      <img src="https://picsum.photos/200/300" alt="Event 1" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 2" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 3" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 4" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 5" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 6" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 7" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 8" className="w-full h-auto" />
+      <img src="https://picsum.photos/200/300" alt="Event 9" className="w-full h-auto" />
+    </div>
+  </div>
+);
+  }
