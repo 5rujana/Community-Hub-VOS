@@ -22,7 +22,6 @@ app.use(express.static("public")) //to store public asserts
 
 app.use(cookieParser())
 
-
 import userRouter from './routes/user.routes.js'
 import threadRouter from "./routes/thread.routes.js"
 import followRouter from "./routes/follow.routes.js"

@@ -8,6 +8,9 @@ dotenv.config({
     path:'./env'
 });
 
+app.get("/", async(req, res) =>{
+    return res.json({welcome : "hello from backend"});
+})
 connectDB()
 .then(()=>{
     app.listen(process.env.PORT ||4050, () =>{
@@ -17,3 +20,5 @@ connectDB()
 .catch((err)=>{
     console.log("MongoDB connection failed !!!",err);
 })
+
+export default app;
