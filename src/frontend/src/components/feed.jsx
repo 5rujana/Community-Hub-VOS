@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import FeedItem from "./feedItem";
+import FeedItem from './feedItem';
+import Cookies from 'js-cookie';
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -13,18 +14,33 @@ const Feed = () => {
   }, []);
 
   const fetchPosts = async () => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('accessToken');
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:4050/api/v1/posts/all', {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/posts/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
-      setPosts(response.data.posts);
-      setIsLoading(false);
+      );
+
+      console.log('API Response:', response.data.data); // Log the entire response
+
+      // Extract the posts from the response
+      const fetchedPosts = response.data.data.posts.posts || [];
+
+      if (fetchedPosts.length === 0) {
+        // Set a default post if no posts are fetched
+        setPosts([]);
+      } else {
+        setPosts(fetchedPosts);
+      }
     } catch (err) {
+      console.error('Error fetching posts:', err);
       setError('Failed to fetch posts. Please try again later.');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -38,10 +54,10 @@ const Feed = () => {
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center border-b-[1px] border-[#000000] pb-2 mb-4">
           <div className="relative">
-            <button 
+            <button
               className={`text-[20px] font-bold px-4 py-2 rounded-[8px] ${
-                activeTab === 'feed' 
-                  ? 'text-[#000000] bg-[#e0e0e0]' 
+                activeTab === 'feed'
+                  ? 'text-[#000000] bg-[#e0e0e0]'
                   : 'text-[#b3b3b3] bg-transparent'
               } hover:bg-[#d4d4d4] focus:outline-none focus:ring-2 focus:ring-[#000000]`}
               onClick={() => handleTabChange('feed')}
@@ -53,10 +69,10 @@ const Feed = () => {
             )}
           </div>
           <div className="relative">
-            <button 
+            <button
               className={`text-[20px] font-bold px-4 py-2 rounded-[8px] ${
-                activeTab === 'replies' 
-                  ? 'text-[#000000] bg-[#e0e0e0]' 
+                activeTab === 'replies'
+                  ? 'text-[#000000] bg-[#e0e0e0]'
                   : 'text-[#b3b3b3] bg-transparent'
               } hover:bg-[#d4d4d4] focus:outline-none focus:ring-2 focus:ring-[#000000]`}
               onClick={() => handleTabChange('replies')}
@@ -64,19 +80,17 @@ const Feed = () => {
               Replies
             </button>
             {activeTab === 'replies' && (
-              <div className="absolute top-0 left-0 w-full h-full bg-[#000000] rounded-[8px] opacity-10"></div>
+              <div className="absolute top-0 left-0 w/full h-full bg-[#000000] rounded-[8px] opacity-10"></div>
             )}
           </div>
         </div>
-        
+
         {isLoading ? (
           <div className="text-center">Loading...</div>
         ) : error ? (
           <div className="text-center text-red-500">{error}</div>
         ) : (
-          posts.map((post) => (
-            <FeedItem key={post._id} post={post} />
-          ))
+          posts.map((post) => <FeedItem key={post._id} post={post} />)
         )}
       </div>
     </div>

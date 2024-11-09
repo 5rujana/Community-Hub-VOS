@@ -14,14 +14,14 @@ function App() {
     <>
     <BrowserRouter>
       <Routes>
-        <Route path='v1/' element={<LandingPage />} />
-        <Route path='v1/signup' element={<SignupPage />} />
-        <Route path='v1/login' element={<LoginPage />} />
-        <Route path='v1/home' element={<DashboardSection />} />
-        <Route path='v1/threads' element={<ThreadsPage />} />
-        <Route path='v1/feed' element={<FeedPage/>} />
-        <Route path='v1/dashboard' element={<DashboardSection />} />
-        <Route path='v1/herosection' element={<HeroSection />} />
+        <Route path='v1/' element={<LandingPage />} /> {/* Deployed */}
+        <Route path='v1/signup' element={<SignupPage />} /> {/* Deployed */}
+        <Route path='v1/login' element={<LoginPage />} />  {/* Deployed */}
+        <Route path='v1/home' element={<DashboardSection />} /> {/* Deployed */}
+        <Route path='v1/threads' element={<ThreadsPage />} /> {/* Deployed */}
+        <Route path='v1/feed' element={<FeedPage/>} />  {/* Deployed */}
+        <Route path='v1/dashboard' element={<DashboardSection />} /> {/* Deployed */}
+        <Route path='v1/herosection' element={<HeroSection />} />   {/* Deployed */}
         <Route path='v1/profile' element = {<ProfilePage />} />
       </Routes>
     </BrowserRouter>

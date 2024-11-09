@@ -1,46 +1,101 @@
-import NavBar from '../components/NavBar'
-import logo from '../assets/logo.png'
-import lock from '../assets/lock.png'
-import two_art from '../assets/two_art.png'
+import React, { useState } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import NavBar from '../components/NavBar';
+import logo from '../assets/logo.png';
+import lock from '../assets/lock.png';
+import two_art from '../assets/two_art.png';
 
 const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleLogin = () => {
+    const loginData = {
+      username: username,
+      password: password,
+    };
+    setLoading(true);
+    axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/login`, loginData, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+    }).then((response) => {
+      setError(null);
+      console.log(response.data.data);
+      Cookies.set('accessToken', response.data.data.accessToken);
+      Cookies.set('refreshToken', response.data.data.refreshToken);
+      if(response.data.success) {
+        window.location.href = '/v1/dashboard';
+      }
+      else {
+        setError('Login failed. Please try again.');
+      }
+      setLoading(false);
+    }).catch((error) => {
+      console.error('Error logging in:', error);
+      setError('Internal server error. Please try again later.');
+      setLoading(false);
+    });
+  };
+
   return (
     <div className='relative h-screen w-screen radical-gradient'>
-    <NavBar />
-    <div className='absolute font-serif font-bold text-gray1 text-5xl text-center top-28 left-80'>
-            LOGIN 
-    </div>
-    <div className='absolute top-40 left-20'>
+      <NavBar />
+      <div className='absolute font-serif font-bold text-gray1 text-5xl text-center top-28 left-80'>
+        LOGIN 
+      </div>
+      <div className='absolute top-40 left-20'>
         <img src={two_art} alt="" className='w-140' />
-    </div>
-    <div className="absolute h-120 w-100 top-32 right-28 bg-white">
+      </div>
+      <div className="absolute h-120 w-100 top-32 right-28 bg-white">
         <div className="absolute top-6 left-36 flex items-center">
-            <img className="h-10 w-12 mr-2" src={logo} alt="" />
-            <span className="span tracking-tight font-bold text-2xl font-sans">CSI X VIT AP</span>
+          <img className="h-10 w-12 mr-2" src={logo} alt="" />
+          <span className="span tracking-tight font-bold text-2xl font-sans">CSI X VIT AP</span>
         </div>
         <div className="mx-8 mb-6 absolute top-28 left-3 w-98">
-            <label className="block mb-2 text-sm font-medium text-black">Email address</label>
-            <input type="email" id="email" className="bg-gray-50 border border-black text-black text-sm rounded-lg block w-full p-2.5" placeholder="xyz.abc@vitapstudent.ac.in" required />
+          <label className="block mb-2 text-sm font-medium text-black">Email address</label>
+          <input
+            type="email"
+            id="email"
+            className="bg-gray-50 border border-black text-black text-sm rounded-lg block w-full p-2.5"
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="xyz.abc@vitapstudent.ac.in"
+            required
+          />
         </div> 
         <div className="mx-8 mb-6 absolute top-56 left-3 w-98">
-            <label className="block mb-2 text-sm font-medium text-black">Password</label>
-            <input type="password" id="password" className="bg-gray-50 border border-black text-black text-sm rounded-lg block w-full p-2.5" placeholder="•••••••••" required />
+          <label className="block mb-2 text-sm font-medium text-black">Password</label>
+          <input
+            type="password"
+            id="password"
+            className="bg-gray-50 border border-black text-black text-sm rounded-lg block w-full p-2.5"
+            placeholder="•••••••••"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div> 
-        
         <div className='bg-gradient-to-r from-yellow1 via-yellow2 to-yellow3 p-4 mx-8 mt-9 rounded-lg mb-6 absolute top-81 left-3 w-98 text-center'>
-            <button className=' flex flex-row justify-center items-center w-full font-sans font-medium text-xl'><img src={lock} alt="" className='w-4 h-4' />&nbsp;LOGIN</button>
+          <button
+            className='flex flex-row justify-center items-center w-full font-sans font-medium text-xl'
+            onClick={handleLogin}
+          >
+            <img src={lock} alt="" className='w-4 h-4' />&nbsp;LOGIN
+          </button>
         </div>
+        {error && <p className="text-red-500 text-xs italic mt-4">{error}</p>}
         <div className='absolute bottom-52 left-30 font-sans font-semibold'>
-            If you don't have an account: &nbsp;
-            <a href='/v1/signup' className='text-violet-700'>SIGN UP</a>
+          If you don't have an account: &nbsp;
+          <a href='/v1/signup' className='text-violet-700'>SIGN UP</a>
         </div>
         <div className='absolute bottom-7 left-48 font-sans text-xs underline underline-offset-1'>
-            © CSI CHAPTER 2024
+          © CSI CHAPTER 2024
         </div>
+      </div>
     </div>
+  );
+};
 
-    </div>
-  )
-}
-
-export default LoginPage
+export default LoginPage;

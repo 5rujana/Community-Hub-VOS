@@ -1,57 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
-export default function FeedItem({ postId }) {
-  const [likes, setLikes] = useState(post.likes);
+export default function FeedItem({ post }) {
+  const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
-  const [comments, setComments] = useState(post.comments);
+  const [comments, setComments] = useState([]);
   const [showCommentPopup, setShowCommentPopup] = useState(false);
   const [newComment, setNewComment] = useState('');
-  useEffect(()=>{
-    async function fetchPostData(){
-      try{
-        const commentrResponse = await axios.get(`comments/${postId}`)
-        setComments(commentrResponse.data.comments);
-      }catch(err){
-        console.error("error fetching comments", err);
+
+  const postId = post._id;
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = Cookies.get('accessToken');
+
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  useEffect(() => {
+    async function fetchPostData() {
+      try {
+        const commentResponse = await axios.get(`${import.meta.env.VITE_API_URL}/comments/${postId}`, axiosConfig);
+        setComments(commentResponse.data.comments || []);
+      } catch (err) {
+        console.error('Error fetching comments', err);
       }
 
-      try{
-        const likeResponse = await axios.get(`likes/${postId}`)
-        setLikes(likeResponse.data.likes);
-      }catch(err){
-        console.error("error fetching likes", err);
+      try {
+        const likeResponse = await axios.get(`${import.meta.env.VITE_API_URL}/likes/${postId}`, axiosConfig);
+        setLikes(likeResponse.data.likes || 0);
+      } catch (err) {
+        console.error('Error fetching likes', err);
       }
 
-      try{
-        const isLikedResponse = await axios.get(`/likes/toggle/p/${postId}`)
+      try {
+        const isLikedResponse = await axios.get(`${import.meta.env.VITE_API_URL}/likes/isLiked/${postId}`, axiosConfig);
         setIsLiked(isLikedResponse.data.isLiked);
-      }catch(err){
-        console.error("error", err);
-      }
-      try{
-        const newCommentResponse = await axios.post(`comments/${postId}`, {text: newComment})
-        setComments([...comments, newCommentResponse.data.comment]);
-      }catch(err){
-        console.error("error adding new comment", err);
+      } catch (err) {
+        console.error('Error fetching like status', err);
       }
     }
     fetchPostData();
-  },[postId])
+  }, [postId]);
 
   const handleLike = async () => {
-    try{
+    try {
       if (isLiked) {
-        await axios.delete(`/likes/${postId}`, {like: false});
-        setLikes(likes - 1);
+        await axios.delete(`${API_URL}/likes/${postId}`, axiosConfig);
+        setLikes((prevLikes) => prevLikes - 1);
       } else {
-        await axios.post(`/likes/${postId}`, {like: true});
-        setLikes(likes + 1);
+        await axios.post(`${API_URL}/likes/${postId}`, null, axiosConfig);
+        setLikes((prevLikes) => prevLikes + 1);
       }
       setIsLiked(!isLiked);
-    }catch(err){
-      console.error("error updating like: ", err);
+    } catch (err) {
+      console.error('Error updating like:', err);
     }
   };
 
@@ -59,19 +65,24 @@ export default function FeedItem({ postId }) {
     setShowCommentPopup(true);
   };
 
-  // const handleShare = () => {
-  //   alert('Sharing this post!');
-  // };
+  const handleShare = () => {
+    alert('Sharing this post!');
+  };
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
-    if(newComment.trim()){
-      try{
-        const newCommentResponse = await axios.post(`comments/${postId}`, {text: newComment, author: "user"});
-        setComments([...comments, newCommentResponse.data.comment]);
+    if (newComment.trim()) {
+      try {
+        const commentData = { text: newComment };
+        const newCommentResponse = await axios.post(
+          `${API_URL}/comments/${postId}`,
+          commentData,
+          axiosConfig
+        );
+        setComments((prevComments) => [...prevComments, newCommentResponse.data.comment]);
         setNewComment('');
-      }catch(err){
-        console.error("error adding new comment", err);
+      } catch (err) {
+        console.error('Error adding new comment', err);
       }
     }
   };
@@ -81,7 +92,7 @@ export default function FeedItem({ postId }) {
       <div className="bg-white p-4 rounded-[8px] shadow-md">
         <div className="flex items-start space-x-4">
           <img
-            src={post.authorAvatar || "https://picsum.photos/50"}
+            src={post.authorAvatar || 'https://picsum.photos/50'}
             alt="profile"
             className="w-12 h-12 rounded-full"
           />
@@ -92,9 +103,7 @@ export default function FeedItem({ postId }) {
               </div>
               <div className="text-[14px] text-[#b3b3b3]">{post.timeAgo}</div>
             </div>
-            <div className="text-[16px] text-[#000000]">
-              {post.content}
-            </div>
+            <div className="text-[16px] text-[#000000]">{post.content}</div>
             {post.image && (
               <img
                 src={post.image}
@@ -106,7 +115,9 @@ export default function FeedItem({ postId }) {
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={handleLike}
-                className={`text-[20px] ${isLiked ? 'text-red-500' : 'text-[#000000]'}`}
+                className={`text-[20px] ${
+                  isLiked ? 'text-red-500' : 'text-[#000000]'
+                }`}
               >
                 <i className={`${isLiked ? 'fas' : 'far'} fa-heart`}></i>
               </motion.button>
@@ -156,13 +167,16 @@ export default function FeedItem({ postId }) {
               <h2 className="text-xl font-bold mb-4">Comments</h2>
               <div className="max-h-60 overflow-y-auto mb-4">
                 {comments.map((comment) => (
-                  <div key={comment.id} className="mb-2">
+                  <div key={comment._id} className="mb-2">
                     <strong>{comment.author}: </strong>
                     {comment.text}
                   </div>
                 ))}
               </div>
-              <form onSubmit={handleSubmitComment} className="flex items-center">
+              <form
+                onSubmit={handleSubmitComment}
+                className="flex items-center"
+              >
                 <input
                   type="text"
                   value={newComment}

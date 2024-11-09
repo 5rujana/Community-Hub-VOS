@@ -1,5 +1,5 @@
 import React from 'react'
-import NavBar from '../components/navbar'
+import NavBar from '../components/NavBar'
 import Profile from '../components/profile'
 import Recommended from '../components/recommended'
 import Card from '../components/CARD'

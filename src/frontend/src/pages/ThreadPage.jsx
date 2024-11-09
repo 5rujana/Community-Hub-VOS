@@ -24,7 +24,7 @@ const ThreadsPage = () => {
       content: newPost,
     };
 
-    axios.post('http://localhost:4050/api/v1/threads/', postData, {
+    axios.post(`${import.meta.env.VITE_API_URL}/api/v1/threads/`, postData, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${Cookies.get('accessToken')}`,
@@ -38,7 +38,7 @@ const ThreadsPage = () => {
   };
 
   const fetchPosts = () => {
-    axios.get('http://localhost:4050/api/v1/threads/all', {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/v1/threads/all`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${Cookies.get('accessToken')}`,
@@ -49,7 +49,6 @@ const ThreadsPage = () => {
         setLoading(false);
       })
       .catch((error) => {
-        setError('Error fetching posts. Please try again later.');
         setLoading(false);
       });
   };
